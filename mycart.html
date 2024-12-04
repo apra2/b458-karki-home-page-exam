@@ -5,8 +5,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Cart - Makeup Heaven</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <script>
+        // Function to remove item from cart
+        function removeItem(button) {
+            var row = button.parentNode.parentNode;
+            row.parentNode.removeChild(row);
+            updateCartTotal();
+        }
+
+        // Function to update the total price
+        function updateCartTotal() {
+            var total = 0;
+            var rows = document.querySelectorAll("table tbody tr");
+
+            rows.forEach(function(row) {
+                var price = parseFloat(row.cells[2].innerText.replace('$', ''));
+                var quantity = parseInt(row.cells[1].querySelector("input").value);
+                total += price * quantity;
+            });
+
+            document.getElementById("cart-total").innerText = "$" + total.toFixed(2);
+        }
+
+        // Function to update quantity
+        function updateQuantity(input) {
+            var row = input.parentNode.parentNode;
+            var price = parseFloat(row.cells[2].innerText.replace('$', ''));
+            var quantity = parseInt(input.value);
+
+            row.cells[2].innerText = "$" + (price * quantity).toFixed(2);
+            updateCartTotal();
+        }
+    </script>
 </head>
 <body>
+    <!-- Navbar -->
     <nav class="navbar navbar-expand-lg">
         <a class="navbar-brand" href="#">Makeup Heaven</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -23,6 +57,7 @@
         </div>
     </nav>
 
+    <!-- Cart Table -->
     <div class="container my-4">
         <h2 class="text-center mb-4">My Cart</h2>
         <table class="table">
@@ -37,16 +72,35 @@
             <tbody>
                 <tr>
                     <td>Niacinamide Serum</td>
-                    <td>1</td>
+                    <td><input type="number" value="1" min="1" class="form-control" onchange="updateQuantity(this)" /></td>
                     <td>$20.00</td>
-                    <td><button class="btn btn-danger btn-sm">Remove</button></td>
+                    <td><button class="btn btn-danger btn-sm" onclick="removeItem(this)">Remove</button></td>
                 </tr>
-                <!-- Add more items as needed -->
+                <tr>
+                    <td>Luxury Lipstick</td>
+                    <td><input type="number" value="2" min="1" class="form-control" onchange="updateQuantity(this)" /></td>
+                    <td>$15.00</td>
+                    <td><button class="btn btn-danger btn-sm" onclick="removeItem(this)">Remove</button></td>
+                </tr>
+                <tr>
+                    <td>Flawless Foundation</td>
+                    <td><input type="number" value="1" min="1" class="form-control" onchange="updateQuantity(this)" /></td>
+                    <td>$30.00</td>
+                    <td><button class="btn btn-danger btn-sm" onclick="removeItem(this)">Remove</button></td>
+                </tr>
+                <tr>
+                    <td>Elegant Eyeshadow Palette</td>
+                    <td><input type="number" value="1" min="1" class="form-control" onchange="updateQuantity(this)" /></td>
+                    <td>$25.00</td>
+                    <td><button class="btn btn-danger btn-sm" onclick="removeItem(this)">Remove</button></td>
+                </tr>
+                <!-- Add more items here as needed -->
             </tbody>
         </table>
-        <button class="btn btn-success">Checkout</button>
+        <div class="d-flex justify-content-between">
+            <h4>Total: <span id="cart-total">$95.00</span></h4>
+            <button class="btn btn-success">Checkout</button>
+        </div>
     </div>
-
-    
 </body>
 </html>
